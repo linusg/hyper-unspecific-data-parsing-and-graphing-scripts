@@ -127,7 +127,7 @@ python3 scripts/plot_grep_analyzer.py output/stats.json fixmes_and_todos
 
 ### Analyzers
 
-### `grep`
+#### `grep`
 
 Count occurences of strings or regular expressions across all files. Does not
 actually use grep(1).
