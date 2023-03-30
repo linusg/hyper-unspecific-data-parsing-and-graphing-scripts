@@ -53,15 +53,20 @@ AnalyzerConfig: TypeAlias = Config.Analyzers.Grep | Config.Analyzers.SCC
 def load_config(path: Path) -> Config:
     with path.open("rb") as f:
         config = tomllib.load(f)
+    config_dir = path.parent
     return Config(
-        repository=Path(cast(str, config["repository"])),
-        output=Path(cast(str, config["output"])),
+        repository=(config_dir / Path(cast(str, config["repository"]))).resolve(),
+        output=(config_dir / Path(cast(str, config["output"]))).resolve,
         processes=cast(int, config.get("processes", cpu_count())),
         commit_sampling=CommitSampling(
             cast(str, config.get("commit_sampling", "all")).upper()
         ),
         cache=(
-            Config.Cache(directory=Path(cast(str, cache_config["directory"])))
+            Config.Cache(
+                directory=(
+                    config_dir / Path(cast(str, cache_config["directory"]))
+                ).resolve()
+            )
             if (cache_config := config.get("cache"))
             else None
         ),
