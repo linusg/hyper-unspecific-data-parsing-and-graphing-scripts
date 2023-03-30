@@ -111,6 +111,27 @@ commit over time.
 python3 scripts/plot_grep_analyzer.py output/stats.json fixmes_and_todos
 ```
 
+### `plot_scc_analyzer.py`
+
+Matplotlib script to plot a summary of scc results. All lines of each category (blank, comment etc.) are summed together across files.
+
+```console
+python3 scripts/plot_scc_analyzer.py output/stats.json lines
+```
+
+### Configuring the matplotlib plots
+
+Since matplotlib is used by the `plot_*` scripts, the design of their plots can be controlled with a [matplotlibrc](https://matplotlib.org/stable/tutorials/introductory/customizing.html#customizing-with-matplotlibrc-files) file in the directory from which the script is invoked. For example, these parameters produce academically-looking plots (requires LaTeX):
+
+```
+text.usetex: True
+font.size: 17
+font.family: serif
+axes.grid: True
+axes.grid.axis: "y"
+axes.grid.which: "both"
+```
+
 ## Config options
 
 | Group                | Name              | Description                                                                                                                                                                                                        | Default             |
