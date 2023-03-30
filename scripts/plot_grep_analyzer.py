@@ -30,4 +30,4 @@ if __name__ == "__main__":
         sys.exit(1)
     stats_path = Path(sys.argv[1])
     analyzer = sys.argv[2]
-    main(stats_path=stats_path)
+    main(stats_path=stats_path, analyzer=analyzer)
