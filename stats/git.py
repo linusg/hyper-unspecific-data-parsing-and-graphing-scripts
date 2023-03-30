@@ -29,6 +29,7 @@ def git(repository: Path, *args: str) -> str:
     process = subprocess.run(
         args,
         text=True,
+        encoding="utf-8",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
