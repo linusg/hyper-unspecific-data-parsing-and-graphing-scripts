@@ -56,7 +56,7 @@ def load_config(path: Path) -> Config:
     config_dir = path.parent
     return Config(
         repository=(config_dir / Path(cast(str, config["repository"]))).resolve(),
-        output=(config_dir / Path(cast(str, config["output"]))).resolve,
+        output=(config_dir / Path(cast(str, config["output"]))).resolve(),
         processes=cast(int, config.get("processes", cpu_count())),
         commit_sampling=CommitSampling(
             cast(str, config.get("commit_sampling", "all")).upper()
