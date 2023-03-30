@@ -32,22 +32,26 @@ def analyze_commit(
     analyzer_name: str,
     analyzer_function: AnalyzerFunction,
 ) -> AnalyzerResult:
-    if cache and (
-        cached_results := load_from_cache(
-            cache, commit_hash=commit.hash, analyzer_name=analyzer_name
-        )
-    ):
-        return cached_results
-    logger.debug(f"Running analyzer function for '{analyzer_name}' @ {commit.hash}")
-    result = analyzer_function(repository)
-    if cache:
-        save_to_cache(
-            cache,
-            commit_hash=commit.hash,
-            analyzer_name=analyzer_name,
-            data=result,
-        )
-    return result
+    try:
+        if cache and (
+            cached_results := load_from_cache(
+                cache, commit_hash=commit.hash, analyzer_name=analyzer_name
+            )
+        ):
+            return cached_results
+        logger.debug(f"Running analyzer function for '{analyzer_name}' @ {commit.hash}")
+        result = analyzer_function(repository)
+        if cache:
+            save_to_cache(
+                cache,
+                commit_hash=commit.hash,
+                analyzer_name=analyzer_name,
+                data=result,
+            )
+        return result
+    except Exception as e:
+        logger.error("Exception while running analyzer", exc_info=e)
+        return {}
 
 
 def process_commit(commit: Commit) -> dict[str, Any]:
