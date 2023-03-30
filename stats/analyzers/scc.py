@@ -19,7 +19,8 @@ def run(repository: Path, *, files_glob: str | None) -> AnalyzerResult:
             "--format",
             "json",
             str(repository),
-        ]
+        ],
+        encoding="utf-8",
     )
     scc_results = cast(list[dict[str, Any]], json.loads(output))
 
