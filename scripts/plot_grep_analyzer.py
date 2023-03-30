@@ -19,7 +19,7 @@ def main(*, stats_path: Path, analyzer: str) -> None:
         x.append(timestamp)
         y.append(total_count)
 
-    plt.plot(x, y)
+    plt.step(x, y)
     plt.margins(x=0)
     plt.show()
 
