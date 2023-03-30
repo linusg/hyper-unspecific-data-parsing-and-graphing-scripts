@@ -51,11 +51,14 @@ def analyze_commit(
 
 
 def process_commit(commit: Commit) -> dict[str, Any]:
+    log_level: str = process_commit.log_level  # type: ignore[attr-defined]
     tmp_repositories: Queue[Path] = process_commit.tmp_repositories  # type: ignore[attr-defined]
     cache: Config.Cache = process_commit.cache  # type: ignore[attr-defined]
     analyzer_functions = process_commit.analyzer_functions  # type: ignore[attr-defined]
     processed_commit_count: Synchronized[int] = process_commit.processed_commit_count  # type: ignore[attr-defined]
     total_commit_count: Synchronized[int] = process_commit.total_commit_count  # type: ignore[attr-defined]
+
+    logging.root.setLevel(level=log_level)
 
     processed_commit_count.value += 1
     current = processed_commit_count.value
@@ -86,6 +89,7 @@ def process_commit(commit: Commit) -> dict[str, Any]:
 
 
 def process_commit_init(
+    log_level: str,
     tmp_repositories: Queue[Path],
     cache: Config.Cache | None,
     analyzer_functions: dict[str, AnalyzerFunction],
@@ -93,6 +97,7 @@ def process_commit_init(
     total_commit_count: Synchronized[int],
 ) -> None:
     # https://stackoverflow.com/a/3843313/5952681
+    process_commit.log_level = log_level
     process_commit.tmp_repositories = tmp_repositories  # type: ignore[attr-defined]
     process_commit.cache = cache  # type: ignore[attr-defined]
     process_commit.analyzer_functions = analyzer_functions  # type: ignore[attr-defined]
@@ -138,6 +143,7 @@ def main(*, config_path: Path) -> None:
             processes=config.processes,
             initializer=process_commit_init,
             initargs=(
+                config.logging.level,
                 tmp_repositories,
                 config.cache,
                 analyzer_functions,
