@@ -6,12 +6,16 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
 
 from stats.filters import filter_files
+from stats.git import Commit
 
 if TYPE_CHECKING:
     from stats.analyzers import AnalyzerResult
 
 
-def run(repository: Path, *, files_glob: str | None) -> AnalyzerResult:
+def run(
+    repository: Path, end_commit: Commit, *, files_glob: str | None
+) -> AnalyzerResult:
+    _ = end_commit
     output = subprocess.check_output(
         [
             "scc",

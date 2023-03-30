@@ -5,15 +5,21 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from stats.filters import filter_files
-from stats.git import get_files
+from stats.git import Commit, get_files
 
 if TYPE_CHECKING:
     from stats.analyzers import AnalyzerResult
 
 
 def run(
-    repository: Path, *, files_glob: str | None, regex: str, case_insensitive: bool
+    repository: Path,
+    end_commit: Commit,
+    *,
+    files_glob: str | None,
+    regex: str,
+    case_insensitive: bool,
 ) -> AnalyzerResult:
+    _ = end_commit
     pattern = re.compile(
         regex.encode(),
         re.IGNORECASE if case_insensitive else re.NOFLAG,

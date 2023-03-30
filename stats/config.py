@@ -30,6 +30,11 @@ class Config:
             files_glob: str | None
 
         @dataclass
+        class GrepCommits:
+            regex: str
+            case_insensitive: bool
+
+        @dataclass
         class Grep(_Base):
             regex: str
             case_insensitive: bool
@@ -79,6 +84,12 @@ def load_config(path: Path) -> Config:
                 {
                     "grep": lambda: Config.Analyzers.Grep(
                         files_glob=cast(str | None, analyzer_config.get("files_glob")),
+                        regex=cast(str, analyzer_config["regex"]),
+                        case_insensitive=cast(
+                            bool, analyzer_config.get("case_insensitive", False)
+                        ),
+                    ),
+                    "grep_commits": lambda: Config.Analyzers.GrepCommits(
                         regex=cast(str, analyzer_config["regex"]),
                         case_insensitive=cast(
                             bool, analyzer_config.get("case_insensitive", False)
