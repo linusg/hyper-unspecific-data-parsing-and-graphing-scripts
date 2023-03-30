@@ -63,3 +63,7 @@ def get_files(repository: Path) -> Iterator[Path]:
         # Git also lists symlinks, skip those.
         if (path := repository / line).is_file():
             yield path
+
+
+def get_commit_texts(repository: Path) -> str:
+    return git(repository, "log", "--pretty=format:%B", "HEAD~1..HEAD")

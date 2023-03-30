@@ -159,6 +159,15 @@ actually use grep(1).
 | `regex`            | Regular expression pattern to look for, make sure to escape properly | required |
 | `case_insensitive` | Whether to compile the pattern with `re.IGNORECASE`                  | false    |
 
+#### `grep_commits`
+
+Count occurrences of strings or regular expressions in commit messages.
+
+| Name               | Description                                                          | Default  |
+| :----------------- | :------------------------------------------------------------------- | :------- |
+| `regex`            | Regular expression pattern to look for, make sure to escape properly | required |
+| `case_insensitive` | Whether to compile the pattern with `re.IGNORECASE`                  | false    |
+
 #### `scc`
 
 Uses [scc(1)](https://github.com/boyter/scc) to generate per-file line count
@@ -170,7 +179,7 @@ stats.
 
 ## TODO
 
-Tests, more analyzers (e.g. for commit messages).
+Tests, more analyzers.
 
 ## License
 
