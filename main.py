@@ -4,6 +4,7 @@ import json
 import logging
 import sys
 from dataclasses import asdict
+from itertools import zip_longest
 from multiprocessing import Pool, Queue, Value
 from multiprocessing.sharedctypes import Synchronized
 from pathlib import Path
@@ -29,6 +30,7 @@ def analyze_commit(
     repository: Path,
     cache: Config.Cache | None,
     commit: Commit,
+    end_commit: Commit,
     analyzer_name: str,
     analyzer_function: AnalyzerFunction,
 ) -> AnalyzerResult:
@@ -40,7 +42,7 @@ def analyze_commit(
         ):
             return cached_results
         logger.debug(f"Running analyzer function for '{analyzer_name}' @ {commit.hash}")
-        result = analyzer_function(repository)
+        result = analyzer_function(repository, end_commit)
         if cache:
             save_to_cache(
                 cache,
@@ -54,7 +56,7 @@ def analyze_commit(
         return {}
 
 
-def process_commit(commit: Commit) -> dict[str, Any]:
+def process_commit(commit: Commit, end_commit: Commit) -> dict[str, Any]:
     log_level: str = process_commit.log_level  # type: ignore[attr-defined]
     tmp_repositories: Queue[Path] = process_commit.tmp_repositories  # type: ignore[attr-defined]
     cache: Config.Cache = process_commit.cache  # type: ignore[attr-defined]
@@ -77,6 +79,7 @@ def process_commit(commit: Commit) -> dict[str, Any]:
             repository=repository,
             cache=cache,
             commit=commit,
+            end_commit=end_commit,
             analyzer_name=analyzer_name,
             analyzer_function=analyzer_function,
         )
@@ -155,7 +158,13 @@ def main(*, config_path: Path) -> None:
                 Value("i", len(commits)),
             ),
         ) as pool:
-            results = list(pool.map(process_commit, commits))
+            results = list(
+                pool.starmap(
+                    process_commit,
+                    # Pair up a commit with the end commit, useful for revision ranges in git commands.
+                    zip_longest(commits, commits[1:], fillvalue=commits[-1]),
+                )
+            )
 
         logger.info(f"Saving results to {config.output}, this might take a while!")
         config.output.parent.mkdir(parents=True, exist_ok=True)
