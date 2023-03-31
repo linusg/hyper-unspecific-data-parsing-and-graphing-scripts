@@ -170,7 +170,7 @@ stats.
 
 ## TODO
 
-Tests, CI, more analyzers (e.g. for commit messages).
+Tests, more analyzers (e.g. for commit messages).
 
 ## License
 

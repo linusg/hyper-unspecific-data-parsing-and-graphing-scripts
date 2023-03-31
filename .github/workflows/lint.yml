@@ -28,3 +28,16 @@ jobs:
           checkName: 'mypy'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  black:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11.2
+          architecture: x64
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Check format
+        run: pip install black; black --check .
