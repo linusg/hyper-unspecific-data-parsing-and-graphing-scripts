@@ -20,6 +20,9 @@ def main(*, stats_path: Path, analyzer: str) -> None:
         y.append(total_count)
 
     plt.step(x, y)
+    plt.title(f"Occurrences of {analyzer} over time, sourced from {stats_path.stem}")
+    plt.ylabel("Occurrences")
+    plt.xlabel("Date")
     plt.margins(x=0)
     plt.show()
 
