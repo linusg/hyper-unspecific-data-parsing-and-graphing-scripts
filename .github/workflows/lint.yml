@@ -6,8 +6,6 @@ on:
       - '*.py'
   pull_request:
     branches: ["main"]
-    paths:
-      - '*.py'
 
 jobs:
   mypy:
