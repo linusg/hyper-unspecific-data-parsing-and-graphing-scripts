@@ -5,7 +5,7 @@ import json
 import sys
 from pathlib import Path
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore[import]
 
 
 def main(*, stats_path: Path, analyzer: str) -> None:
