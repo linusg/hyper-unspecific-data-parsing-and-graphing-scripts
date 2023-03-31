@@ -101,7 +101,7 @@ def process_commit_init(
     total_commit_count: Synchronized[int],
 ) -> None:
     # https://stackoverflow.com/a/3843313/5952681
-    process_commit.log_level = log_level
+    process_commit.log_level = log_level  # type: ignore[attr-defined]
     process_commit.tmp_repositories = tmp_repositories  # type: ignore[attr-defined]
     process_commit.cache = cache  # type: ignore[attr-defined]
     process_commit.analyzer_functions = analyzer_functions  # type: ignore[attr-defined]
