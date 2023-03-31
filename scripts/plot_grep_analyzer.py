@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from argparse import ArgumentParser
 import datetime
 import json
 import sys
@@ -8,16 +9,21 @@ from pathlib import Path
 import matplotlib.pyplot as plt  # type: ignore[import]
 
 
-def main(*, stats_path: Path, analyzer: str) -> None:
+def main(*, stats_path: Path, analyzer: str, cumulative: bool) -> None:
     stats = json.loads(stats_path.read_text())
 
     x = []
     y = []
+    cumulative_sum = 0
     for commit in stats:
         timestamp = datetime.datetime.utcfromtimestamp(commit["timestamp"])
         total_count = sum(commit["analyzers"][analyzer].values())
         x.append(timestamp)
-        y.append(total_count)
+        if cumulative:
+            cumulative_sum += total_count
+            y.append(cumulative_sum)
+        else:
+            y.append(total_count)
 
     plt.step(x, y)
     plt.title(f"Occurrences of {analyzer} over time, sourced from {stats_path.stem}")
@@ -28,9 +34,19 @@ def main(*, stats_path: Path, analyzer: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print(f"usage: {sys.argv[0]} <stats_path> <analyzer>")
-        sys.exit(1)
-    stats_path = Path(sys.argv[1])
-    analyzer = sys.argv[2]
-    main(stats_path=stats_path, analyzer=analyzer)
+    parser = ArgumentParser()
+    parser.add_argument("stats_path", type=Path)
+    parser.add_argument("analyzer")
+    parser.add_argument(
+        "-c",
+        "--cumulative",
+        action="store_true",
+        default=False,
+        help="Sum up values cumulatively over time, useful for grep_commits analyzers",
+    )
+    arguments = parser.parse_args()
+    main(
+        stats_path=arguments.stats_path,
+        analyzer=arguments.analyzer,
+        cumulative=arguments.cumulative,
+    )
