@@ -40,8 +40,7 @@ class Config:
             case_insensitive: bool
 
         @dataclass
-        class SCC(_Base):
-            ...
+        class SCC(_Base): ...
 
     repository: Path
     output: Path

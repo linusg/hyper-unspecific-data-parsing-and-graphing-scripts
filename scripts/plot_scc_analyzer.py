@@ -34,7 +34,7 @@ def main(*, stats_path: Path, analyzer: str) -> None:
     x = []
     y = []
     for commit in stats:
-        timestamp = datetime.datetime.utcfromtimestamp(commit["timestamp"])
+        timestamp = datetime.datetime.fromtimestamp(commit["timestamp"], datetime.UTC)
         lines = sum(
             (
                 SCCResults(

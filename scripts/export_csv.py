@@ -16,9 +16,9 @@ def main(*, stats_path: Path) -> None:
             for file, result in analyzer_results.items():
                 row = [
                     commit["commit"],
-                    datetime.datetime.utcfromtimestamp(commit["timestamp"]).strftime(
-                        "%Y-%m-%d %H:%M:%S"
-                    ),
+                    datetime.datetime.fromtimestamp(
+                        commit["timestamp"], datetime.UTC
+                    ).strftime("%Y-%m-%d %H:%M:%S"),
                     file,
                     *(result.values() if isinstance(result, dict) else [result]),
                 ]

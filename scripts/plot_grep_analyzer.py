@@ -16,7 +16,7 @@ def main(*, stats_path: Path, analyzer: str, cumulative: bool) -> None:
     y = []
     cumulative_sum = 0
     for commit in stats:
-        timestamp = datetime.datetime.utcfromtimestamp(commit["timestamp"])
+        timestamp = datetime.datetime.fromtimestamp(commit["timestamp"], datetime.UTC)
         total_count = sum(commit["analyzers"][analyzer].values())
         x.append(timestamp)
         if cumulative:

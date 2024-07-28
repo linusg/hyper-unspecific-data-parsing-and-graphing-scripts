@@ -51,8 +51,8 @@ def get_commits(repository: Path) -> Iterator[Commit]:
     )
     for line in output.splitlines():
         commit_hash, commit_timestamp = line.split()
-        commit_timestamp_datetime = datetime.datetime.utcfromtimestamp(
-            int(commit_timestamp)
+        commit_timestamp_datetime = datetime.datetime.fromtimestamp(
+            int(commit_timestamp), datetime.UTC
         )
         yield Commit(hash=commit_hash, timestamp=commit_timestamp_datetime)
 
